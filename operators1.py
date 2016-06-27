@@ -66,29 +66,35 @@ def array_opt(db):
 
 	 		
 
+def mod_opt(db):
+	#here divisor=3
+	#remainder =1
+	for i in db.inventory.find({'qty':{'$mod':[3,1]}}):
+		print i
 if __name__ == "__main__":
 	try:
 		db = establish_connection()
 		insert_data(db)
-		print "ALL_---"
-		get_all(db)
-		value=int(raw_input("Enter the quantity to match:  "))
-		eq_operator(db,value)
-		value=raw_input("Enter the item name to match: ")
-		eq_embedded(db,value)
-		value=raw_input("Enter the tag value to match: ")
-		eq_array_ele(db,value)
-		#One can also find the complete array that can be matched
-		for p in db.inventory.find({'tags': [ "A", "B" ] } ):
-			print p
+		# print "ALL_---"
+		# get_all(db)
+		# value=int(raw_input("Enter the quantity to match:  "))
+		# eq_operator(db,value)
+		# value=raw_input("Enter the item name to match: ")
+		# eq_embedded(db,value)
+		# value=raw_input("Enter the tag value to match: ")
+		# eq_array_ele(db,value)
+		# #One can also find the complete array that can be matched
+		# for p in db.inventory.find({'tags': [ "A", "B" ] } ):
+		# 	print p
 
-		svalue=	int (raw_input("Enter the first value to match"))
-		evalue=int (raw_input("Enter the Second value to match"))
-		in_values(db,svalue,evalue)# third is given by default
+		# svalue=	int (raw_input("Enter the first value to match"))
+		# evalue=int (raw_input("Enter the Second value to match"))
+		# in_values(db,svalue,evalue)# third is given by default
 
-		or_values(db)
-		print "\n\nArray A,C all--"
-		array_opt(db)
+		# or_values(db)
+		# print "\n\nArray A,C all--"
+		# array_opt(db)
+		mod_opt(db)
 		db.inventory.drop()
 	except Exception, e:
 		raise e			

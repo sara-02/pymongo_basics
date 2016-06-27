@@ -1,6 +1,10 @@
-Mongo is an open source schemaless database system which is very different from the more popular MySQL. The most considerable differences are that MySQL is written using SQL queries, while MongoDB is focused on BSON (Binary JSON)
-A collection may be considered a table except there are no aligned columns. Each entry (row) can use varying dynamic schemas in key-value pairs.
-Now each of these entries or rows inside a collection is called a document. They are not physical documents like .txt or .html, but document-based objects. They are basically JSON data blocks stored in memory-mapped files which behave as separate entries in your collections.
+1. Mongo is an open source schemaless database system which is very different from the more popular MySQL. 2. The most considerable differences are that MySQL is written using SQL queries, while MongoDB is focused on BSON (Binary JSON)
+3. A collection may be considered a table except there are no aligned columns. Each entry (row) can use varying dynamic schemas in key-value pairs.
+4. Now each of these entries or rows inside a collection is called a document. They are not physical documents like .txt or .html, but document-based objects. They are basically JSON data blocks stored in memory-mapped files which behave as separate entries in your collections.
+5. When the $or operator is performed, the system performs collection level scan, it scan each row to match the query. An effective way to do this is to create indices for the ored columns. This way the system performs index scan which is faster. 
+6. The $mod function in MongoDB needs exactly 2 parameters, one as divisor and otehr as remainder. If no, or extra ones are supplied, then the system throws 'Not Enough Elements Error', 'Too Many Elements Error' repsectively. Each value of the specified key is divided by the divisor, and if the calculated remainder matches the specified value then that row is returned.
+7. The regex supports cases like: ignore case, start-end matching, ignore whitespaces
+
 
 Mongo Shell Commands:
 1. list the bds--show dbs
