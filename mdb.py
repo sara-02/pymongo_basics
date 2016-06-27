@@ -7,7 +7,11 @@ def establish_connection():
 	
 	connection = MongoClient("localhost:27017")
 	# MongoDB URI format:MongoClient('mongodb://localhost:27017/')
-	db = connection.myFirstMB #accessing the db
+
+	#print all the existing databases:
+	print connection.database_names()
+
+	db = connection.myFirstMB #accessing the db, similar to use <db>
 	return db
 	
 
@@ -42,11 +46,13 @@ if __name__ == "__main__":
 	try:
 		db = establish_connection()
 		print db.collection_names() #print the list of collections
+		print "countries" in db.collection_names() #check if the collection called countries exists in the db or not
+
 		# record_id=insert_data(db,{"name" : "Germany"})
 		# print record_id
 		# record_id=insert_data(db,{"name" : "India"})
 		# print record_id
-		# print "First Data is %s "%get_first_data(db)
+		print "First Data is %s "%get_first_data(db)
 		print "All Data is ---"
 		get_all(db)
 		print "--The number of documents in the collection are %d "%number_of_records(db)
