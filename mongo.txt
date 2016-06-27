@@ -1,0 +1,10 @@
+Mongo is an open source schemaless database system which is very different from the more popular MySQL. The most considerable differences are that MySQL is written using SQL queries, while MongoDB is focused on BSON (Binary JSON)
+A collection may be considered a table except there are no aligned columns. Each entry (row) can use varying dynamic schemas in key-value pairs.
+Now each of these entries or rows inside a collection is called a document. They are not physical documents like .txt or .html, but document-based objects. They are basically JSON data blocks stored in memory-mapped files which behave as separate entries in your collections.
+
+Mongo Shell Commands:
+1. list the bds--show dbs
+2. switch to a new db---use <db_name>
+3. remove a db----db.runCommand( { dropDatabase: 1 } )
+4. import json into mongo----mongoimport --db debt_data --collection tech_debt --type json --file /home/sarah/Documents/bayseian_data_dump/debt_details-mongo.json --jsonArray
+
