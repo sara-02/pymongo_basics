@@ -27,7 +27,7 @@ def get_first_data(db):
 
 def get_all(db):
 	
-	for value in db.countries.find():
+	for value in db.countries.find(): # find operator can also be on thr $type (here datatype) of the key
 		print value
 
 def number_of_records(db):
@@ -45,7 +45,7 @@ if __name__ == "__main__":
 	
 	try:
 		db = establish_connection()
-		print db.collection_names() #print the list of collections
+		print db.collection_names(include_system_collections=False) #print the list of collections
 		print "countries" in db.collection_names() #check if the collection called countries exists in the db or not
 
 		# record_id=insert_data(db,{"name" : "Germany"})
