@@ -1,9 +1,12 @@
 #Practise codes from the official MongoDB-Pymongo Documentation
 #Link:https://docs.mongodb.com/getting-started/python/
+#After Downloading the dataset use the followiing command
+# mongoimport --db test --collection restaurants --drop --file ~/Downloads/primer-dataset.json
 
 from pymongo import MongoClient
 from pymongo import ASCENDING, DESCENDING
 from datetime import datetime
+import pymongo
 
 def establish_connection():
 	client=MongoClient("localhost:27017") #first step connect to the mongoDB
@@ -139,8 +142,54 @@ def doc_replace(coll):
 
 	return (result.matched_count,result.modified_count)
 
+def create_single_index(coll):
+	index_name=coll.create_index([("cuisine",pymongo.ASCENDING)])
+	return index_name	
+
+def create_compound_index(coll):
+	index_name=coll.create_index([("cuisine",pymongo.ASCENDING),("address.zipcode",pymongo.DESCENDING)])
+	return index_name
+
+def group_by_count(coll):
+	cursor=coll.aggregate(
+		[{"$group":{"_id":"$borough","count":{"$sum":1}}}]
+		)
+	# The above code will aggreate on the basis of borough, and give the sum of number of entry for each type.
+	return cursor
+
+def group_match_count(coll):
+	cursor=coll.aggregate(
+		[{"$match": {"borough": "Queens", "cuisine": "Brazilian"}},
+        {"$group": {"_id": "$address.zipcode", "count": {"$sum": 1}}}
+        ]
+		)
+	return cursor
+
+def del_one(coll):
+	#Deletes the first doc that matches the query
+	result=coll.delete_one({"borough":"Staten Island"})
+	return result.deleted_count	
+
+def del_many(coll):
+	#Deletes all the docs that match the condition
+	result=coll.delete_many({"borough":"Manhattan"})
+	return result.deleted_count
+
+def rem_all_docs(coll):
+	#Remove all the docs from the collection, but not the collection itself
+	result=coll.delete_many({})
+	return result.deleted_count
+
+def remove_collections(coll):
+	#remove the collection, along with all the indexes and meta info if any.
+	coll.drop()
+
+def print_del(del_num,message):
+	print message
+	print "The number of deleted values are %d"%del_num	
+
 def find_info(coll):
-	find function has a scope of single collection only
+	#find function has a scope of single collection only
 	returned_cursor=find_all(coll)
 	message="\n\nAll Documents in the colletion are:\n"
 	print_values(returned_cursor,message)
@@ -187,7 +236,36 @@ def find_info(coll):
 	matched,modified=update_top_level(coll)
 	update_results(matched,modified,message)
 
+	message=create_single_index(coll)
+	print "The single index name is: %s"%message
 
+	message=create_compound_index(coll)
+	print "The compound index name is: %s"%message
+
+	returned_cursor=group_by_count(coll)
+	message="\n\n Grouping and counting by Borough type is:\n"
+	print_values(returned_cursor,message)
+
+	returned_cursor=group_match_count(coll)
+	message="\n\n Grouping and counting by matching specific type of borough and cuisines is:\n"
+	print_values(returned_cursor,message)
+
+	del_num=del_one(coll)
+	message="\n\n Deleting only one value matching the condition:\n"
+	print_del(del_num,message)
+
+	del_num=del_many(coll)
+	message="\n\n Deleteing many values matching the condition:\n"
+	print_del(del_num,message)
+
+	del_num=rem_all_docs(coll)
+	message="\n\n Removing all the exisiting docs in the collection:\n"
+	print_del(del_num,message)
+
+	message="\n\n Remove complete collection\n"
+	print message
+	remove_collections(coll)
+	
 if __name__=="__main__":
 	try:
 		coll=establish_connection()
